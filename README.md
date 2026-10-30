@@ -1,97 +1,108 @@
-# 🏭 Textile Loom OEE & Production Loss Analyzer
+# Textile Loom OEE & Production Loss Analyzer
 
-[![Harvard CS50P](https://img.shields.io/badge/Harvard%20University-CS50P%20Certified-A51C30?style=for-the-badge&logo=harvard&logoColor=white)](https://cs50.harvard.edu/certificates/6077b36a-3ab8-4802-8f90-1cba16c59783)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Tested with Pytest](https://img.shields.io/badge/Tested%20with-Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Harvard CS50P](https://img.shields.io/badge/Harvard%20University-CS50P%20Certified-A51C30?style=flat&logo=harvard&logoColor=white)](https://cs50.harvard.edu/certificates/6077b36a-3ab8-4802-8f90-1cba16c59783)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Pytest](https://img.shields.io/badge/Test%20Suite-Pytest-0A9EDC?style=flat&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg?style=flat)](https://opensource.org/licenses/MIT)
 
-> **Official Final Project for Harvard University's CS50’s Introduction to Programming with Python (CS50P).**  
-> Developed by **Christofer Pedro Sánchez Zuzunaga** (Industrial Engineering, UPC).  
-> 📜 **Verified Academic Credential:** [Harvard Certificate ID: 6077b36a-3ab8-4802-8f90-1cba16c59783](https://cs50.harvard.edu/certificates/6077b36a-3ab8-4802-8f90-1cba16c59783)  
-> 📺 **Official Video Demo:** [Watch on YouTube](https://youtu.be/8U4DbBvVXn8)
-
----
-
-## 📌 Overview
-
-The **Textile Loom OEE & Production Loss Analyzer** is an industrial engineering diagnostic software built in Python to evaluate, benchmark, and financially quantify operational inefficiencies in textile manufacturing plants, with a specialized focus on circular weaving textile looms.
-
-In industrial textile operations, unplanned downtime, speed bottlenecks, and fabric defects cause massive economic leaks. Many manufacturing plants fail to spot root causes due to fragmented records. This computational tool bridges the gap by processing plant parameters, evaluating standardized World-Class Manufacturing (WCM) indicators, and generating an executive financial diagnostic formatted with 	abulate.
+Final engineering project for Harvard University's CS50 Introduction to Programming with Python (CS50P).  
+Author: **Christofer Pedro Sánchez Zuzunaga** (Industrial Engineering, UPC).  
+Credential verification: [Harvard Certificate ID 6077b36a-3ab8-4802-8f90-1cba16c59783](https://cs50.harvard.edu/certificates/6077b36a-3ab8-4802-8f90-1cba16c59783)  
+Video demonstration: [YouTube Video Demo](https://youtu.be/8U4DbBvVXn8)
 
 ---
 
-## ⚙️ Core Engineering Modules
+## Overview
 
-### 1. Overall Equipment Effectiveness (OEE) — calculate_oee
-- Computes composite OEE across the three fundamental industrial pillars:
-  \text{OEE} = \text{Availability} \times \text{Performance} \times \text{Quality}
-- Benchmarks operational health against international World-Class standards:
-  - 🟢 **World Class:** $\ge 85\%$ (Global competitive benchmark).
-  - 🟡 **Acceptable:** \% - 84.9\%$ (Industrial operational average).
-  - 🔴 **Critical:** $< 65\%$ (Bottlenecks requiring immediate TPM / Lean intervention).
-- Validates strict boundary conditions $, throwing handled ValueError exceptions for abnormal sensor or manual inputs.
+The **Textile Loom OEE & Production Loss Analyzer** is a Python-based diagnostic system developed to calculate, benchmark, and quantify operational losses in manufacturing lines, specifically circular weaving textile looms.
 
-### 2. Maintenance Reliability Metrics (TPM) — calculate_reliability
-- **MTBF (Mean Time Between Failures):** Measures operational reliability by dividing net operating uptime by failure events.
-- **MTTR (Mean Time to Repair):** Measures maintainability and technician response time by dividing downtime hours by incident counts.
-- Implements zero-division protection safeguards for zero-failure continuous production runs.
-
-### 3. Financial Loss Quantification — calculate_financial_loss
-- Monetizes technical downtime by multiplying idle machine hours by hourly loom depreciation and direct labor cost.
-- Monetizes scrap waste by multiplying defective fabric kilograms by unit raw material cost.
-- Delivers an aggregated financial impact report, translating engineering metrics directly into executive P&L decision numbers.
+In industrial textile manufacturing, unscheduled downtime, sub-optimal machine speed, and fabric defects represent significant financial losses. This tool provides deterministic metrics following World-Class Manufacturing (WCM) standards and formats an executive breakdown using `tabulate`.
 
 ---
 
-## 📁 Repository Structure
+## Mathematical Formulation & Engineering Modules
 
-`	ext
+### 1. Overall Equipment Effectiveness (OEE) — `calculate_oee`
+The composite OEE indicator is calculated as:
+
+$$\text{OEE} = \text{Availability} \times \text{Performance} \times \text{Quality}$$
+
+Where:
+- Availability: ratio of operating time to planned production time.
+- Performance: ratio of actual operating speed to ideal run rate.
+- Quality: ratio of conforming output to total units produced.
+
+Operational status classification:
+- **World Class**: $\ge 85\%$ (International manufacturing benchmark).
+- **Acceptable**: $65\% \text{ to } 84.9\%$ (Industry operational average).
+- **Critical**: $< 65\%$ (Requires TPM and root-cause intervention).
+
+Input domain constraints: all percentages must be bounded between $0$ and $100$. Out-of-range values raise a `ValueError`.
+
+### 2. Equipment Reliability & Maintenance (TPM) — `calculate_reliability`
+- **Mean Time Between Failures (MTBF)**:
+  $$\text{MTBF} = \frac{\text{Operating Time}}{\text{Number of Failures}}$$
+- **Mean Time to Repair (MTTR)**:
+  $$\text{MTTR} = \frac{\text{Total Downtime}}{\text{Number of Failures}}$$
+
+Edge case handling: When zero breakdowns occur during an observation window, MTBF is defined as total operating time, and MTTR defaults to zero.
+
+### 3. Financial Loss Quantification — `calculate_financial_loss`
+Translates technical parameters into direct financial impact:
+- **Downtime Cost**:
+  $$\text{Cost}_{\text{downtime}} = \text{Downtime Hours} \times \text{Loom Hourly Rate}$$
+- **Scrap Material Cost**:
+  $$\text{Cost}_{\text{scrap}} = \text{Defective Fabric (kg)} \times \text{Raw Material Unit Cost}$$
+- **Total Operational Loss**:
+  $$\text{Loss}_{\text{total}} = \text{Cost}_{\text{downtime}} + \text{Cost}_{\text{scrap}}$$
+
+---
+
+## Project Structure
+
+```text
 textile-loom-oee-analyzer/
-│
-├── project.py          # Central program logic & core engineering calculation functions
-├── test_project.py     # Unit test suite verifying edge cases, zero-division & exceptions with Pytest
-├── requirements.txt    # Production dependencies (tabulate, pytest)
-├── README.md           # Engineering documentation and Harvard verification details
-└── .gitignore          # Environment & cache exclusion rules
-`
+├── project.py          # Core calculation logic and CLI interface
+├── test_project.py     # Unit test suite verifying boundary conditions and exceptions
+├── requirements.txt    # Project dependencies (tabulate, pytest)
+├── .gitignore          # Environment and cache ignore rules
+└── README.md           # Engineering documentation
+```
 
 ---
 
-## 🚀 Getting Started
+## Setup and Execution
 
-### Prerequisites
-- Python 3.10+
-- pip package manager
+### Requirements
+- Python 3.10 or higher
+- `pip`
 
-### Installation & Execution
+### Installation
 
-1. **Clone this repository:**
-   `ash
-   git clone https://github.com/christoferpedrosanchezzuzunaga-eng/textile-loom-oee-analyzer.git
-   cd textile-loom-oee-analyzer
-   `
+```bash
+git clone https://github.com/christoferpedrosanchezzuzunaga-eng/textile-loom-oee-analyzer.git
+cd textile-loom-oee-analyzer
+pip install -r requirements.txt
+```
 
-2. **Install dependencies:**
-   `ash
-   pip install -r requirements.txt
-   `
+### Execution
 
-3. **Run the analyzer:**
-   `ash
-   python project.py
-   `
+Run the CLI analyzer:
+```bash
+python project.py
+```
 
-4. **Run the comprehensive unit test suite:**
-   `ash
-   pytest
-   `
+Run test suite:
+```bash
+pytest
+```
 
 ---
 
-## 👨‍💻 Author & Academic Verification
+## Technical Author & Academic Credentials
 
-**Christofer Pedro Sánchez Zuzunaga**  
-- Industrial Engineering Student — Universidad Peruana de Ciencias Aplicadas (UPC).
+- **Christofer Pedro Sánchez Zuzunaga**
+- Industrial Engineering student at Universidad Peruana de Ciencias Aplicadas (UPC).
 - Harvard University CS50P Certified.
 - Six Sigma Yellow Belt (SSYB™) & Scrum Fundamentals Certified (SFC™).
 - GitHub: [@christoferpedrosanchezzuzunaga-eng](https://github.com/christoferpedrosanchezzuzunaga-eng)
