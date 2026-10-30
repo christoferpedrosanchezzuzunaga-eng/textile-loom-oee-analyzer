@@ -2,6 +2,7 @@
 import sys
 from tabulate import tabulate
 
+# Operational parameters input pipeline
 def main():
     print("=" * 65)
     print("  TEXTILE LOOM OEE & PRODUCTION LOSS ANALYZER - CS50P")
