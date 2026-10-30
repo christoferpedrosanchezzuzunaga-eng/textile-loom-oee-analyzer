@@ -1,3 +1,4 @@
+"""Textile Loom OEE and Reliability Diagnostic Module"""
 import sys
 from tabulate import tabulate
 
