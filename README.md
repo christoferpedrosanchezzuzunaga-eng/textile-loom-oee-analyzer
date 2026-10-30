@@ -106,3 +106,11 @@ pytest
 - Harvard University CS50P Certified.
 - Six Sigma Yellow Belt (SSYB™) & Scrum Fundamentals Certified (SFC™).
 - GitHub: [@christoferpedrosanchezzuzunaga-eng](https://github.com/christoferpedrosanchezzuzunaga-eng)
+
+## Citation & Academic Reference
+
+If referencing this work in industrial case studies, cite as:
+
+```text
+Sánchez Zuzunaga, C. P. (2026). Textile Loom OEE and Production Loss Analyzer. Harvard CS50P.
+```
